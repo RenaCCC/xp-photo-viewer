@@ -1,0 +1,26 @@
+name: Build XP Viewer
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: windows-2019
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Install MinGW
+      run: |
+        choco install mingw -y
+
+    - name: Build EXE
+      run: |
+        g++ viewer_xp.cpp -O2 -static -m32 -o viewer_xp.exe -lgdi32 -mwindows
+
+    - name: Upload EXE
+      uses: actions/upload-artifact@v4
+      with:
+        name: xp_fast_viewer
+        path: viewer_xp.exe
